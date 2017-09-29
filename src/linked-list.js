@@ -2,84 +2,42 @@ const Node = require('./node');
 
 class LinkedList {
     constructor() {//+
-      this.prev = null;
-      this.data = null;
-      this.next = null;
+      this.node = new Node();
+      this._head = this.node;
+      this._tail = this.node;
     }
 
     // геттер
     get length() {//+
-      var temp = this;
+      var temp = this._head;
       var index = 0;
-      while ((temp!= null) && (temp.data != null)) {  //to tail
-        temp = temp.next;
-        index++;
-      }
-
-      if (temp != null) temp = this.prev;
-      while ((temp != null) && (temp.data != null)) {  //to head
-        temp = temp.prev;
-        index++;
+      while (temp != this._tail) {
+        temp=temp.next;
       }
       return index;
     }
 
-    append(data) { //to tail+
-      if (this.data == null) {
-        this.prev = null;
-        this.data = data;
-        this.next = null;
-      } else {
-        var temp = this;
-        while (temp.next != null) {
-          temp = temp.next;
-        }
-			temp.next = new LinkedList();
-			temp.next.data = data;
-      temp.next.prev = temp;
-      temp.next.next = null;
-      }
+    append(data) {
+      var temp =  new Node();
+      temp.data = data;
+      temp.prev = this._tail;
+      this._tail.next = temp;
+      this._tail = temp;
 
       return this;
     }
 
-    addFirst(data) {//+
-  		if (this.data == null) {
-        this.next = null;
-  			this.data = data;	//пустой
-        this.prev = null;
-  		} else {
-  			var temp = new List();
-        //between head and next, this=head
-  			temp.next = this.next;
-        temp.data = this.data;
-        temp.prev = this;
-
-        //edit second
-        if (this.next != null) this.next.prev = temp;
-
-        //edit head
-        this.next = temp;
-        this.data = data;
-  		}
-  		return this;
-  	}
-
     head() {//+
-      return this.data;
+      return this._head.data;
     }
 
     tail() {//+
-      var temp = this;
-      while (temp.next != null) {
-        temp = temp.next;
-      }
-      return temp.data;
+      return this._tail.data;
     }
 
     at(index) {//+
-      var temp = this;
-      for (var i = 0; ((i < index) && (temp != null)); i++) {
+      var temp = this.node;
+      for (var i = 0; ((i < index) && (temp.data != null)); i++) {
         temp = temp.next;
       }
       return temp.data;
@@ -87,55 +45,51 @@ class LinkedList {
 
     insertAt(index, data) {//+
       var i = 0;
-  		var temp = this;
+  		var temp = this.node;
 
       if (index == 0) return this.addFirst(data);
 
-  		while ((temp != null) && (i < index - 1)) {
+  		while ((temp.data != null) && (i < index)) {
   			temp = temp.next;
   			i++;
   		}
 
-      //temp with index-1
-  		var l = new LinkedList();
-  		l.data = data;
-  		l.next = temp.next;
+      //temp with index
+      var l = new Node();
+      l.next = temp.next;
       l.prev = temp;
-      temp.next.prev = l;
-  		temp.next = l;
+      l.data = temp.data;
+
+      temp.data = data;
+      temp.next = l;
 
       return this;
     }
 
     isEmpty() {//+
-      return this.data == null;
+      return this.node.data == null;
     }
 
     clear() {//+
-      this.prev = null;
-      this.data = null;
-      this.next = null;
+      this.node = new Node();
       return this;
     }
 
     deleteAt(index) {//+
-      var temp = this;
+      var temp = this.node;
       var i = 0;
-      while ((temp.next != null) && (i < index - 1)) {
+      while ((temp.next != null) && (i < index)) {
   			temp=temp.next;
   			i++;
   		}
       //edit before
-      if (temp.next != null) {
-        temp.next = temp.next.next;
-        //edit after
-        if (temp.next.next != null) temp.next.next.prev = temp;
-      }
+      temp.prev.next = temp.next;
+      temp.next.prev = temp.prev;
       return this;
     }
 
     reverse() {
-      var temp = this;
+      var temp = this.node;
       //-------------------------------------------------
       //-------------------------------------------------
       //-------------------------------------------------
@@ -144,13 +98,13 @@ class LinkedList {
     }
 
     indexOf(data) {//+
-      var temp = this;
+      var temp = this.node;
       var index = 0;
-      while ((temp != null) && (temp.data != data)) {
+      while ((temp.data != null) && (temp.data != data)) {
         temp = temp.next;
         index++;
       }
-      return (temp == null) ? -1 : index;
+      return (temp.data == null) ? -1 : index;
     }
 }
 
