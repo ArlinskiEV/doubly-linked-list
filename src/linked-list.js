@@ -18,12 +18,14 @@ class LinkedList {
     }
 
     append(data) {
-      var temp =  new Node();
-      temp.data = data;
-      temp.prev = this._tail;
-      this._tail.next = temp;
-      this._tail = temp;
-
+      if (this.node.data == null) this.node.data = data;
+      else {
+        var temp =  new Node();
+        temp.data = data;
+        temp.prev = this._tail;
+        this._tail.next = temp;
+        this._tail = temp;
+      }
       return this;
     }
 
