@@ -2,9 +2,9 @@ const Node = require('./node');
 
 class LinkedList {
     constructor() {//+
-      this.prev = null;
+      this._head = null;
       this.data = null;
-      this.next = null;
+      this._tail = null;
     }
 
     // геттер
@@ -12,13 +12,13 @@ class LinkedList {
       var temp = this;
       var index = 0;
       while ((temp!= null) && (temp.data != null)) {  //to tail
-        temp = temp.next;
+        temp = temp._tail;
         index++;
       }
 
-      if (temp != null) temp = this.prev;
-      while ((temp!= null) && (temp != null)) {  //to head
-        temp = temp.prev;
+      if (temp != null) temp = this._head;
+      while ((temp != null) && (temp.data != null)) {  //to head
+        temp = temp._head;
         index++;
       }
       return index;
@@ -26,18 +26,18 @@ class LinkedList {
 
     append(data) { //to tail+
       if (this.data == null) {
-        this.prev = null;
+        this._head = null;
         this.data = data;
-        this.next = null;
+        this._tail = null;
       } else {
         var temp = this;
-        while (temp.next != null) {
-          temp = temp.next;
+        while (temp._tail != null) {
+          temp = temp._tail;
         }
-			temp.next = new LinkedList();
-			temp.next.data = data;
-      temp.next.prev = temp;
-      temp.next.next = null;
+			temp._tail = new LinkedList();
+			temp._tail.data = data;
+      temp._tail._head = temp;
+      temp._tail._tail = null;
       }
 
       return this;
@@ -45,21 +45,21 @@ class LinkedList {
 
     addFirst(data) {//+
   		if (this.data == null) {
-        this.next = null;
+        this._tail = null;
   			this.data = data;	//пустой
-        this.prev = null;
+        this._head = null;
   		} else {
   			var temp = new List();
-        //between head and next, this=head
-  			temp.next = this.next;
+        //between head and _tail, this=head
+  			temp._tail = this._tail;
         temp.data = this.data;
-        temp.prev = this;
+        temp._head = this;
 
         //edit second
-        if (this.next != null) this.next.prev = temp;
+        if (this._tail != null) this._tail._head = temp;
 
         //edit head
-        this.next = temp;
+        this._tail = temp;
         this.data = data;
   		}
   		return this;
@@ -71,8 +71,8 @@ class LinkedList {
 
     tail() {//+
       var temp = this;
-      while (temp.next != null) {
-        temp=temp.next;
+      while (temp._tail != null) {
+        temp = temp._tail;
       }
       return temp.data;
     }
@@ -80,7 +80,7 @@ class LinkedList {
     at(index) {//+
       var temp = this;
       for (var i = 0; ((i < index) && (temp != null)); i++) {
-        temp = temp.next;
+        temp = temp._tail;
       }
       return temp.data;
     }
@@ -92,17 +92,17 @@ class LinkedList {
       if (index == 0) return this.addFirst(data);
 
   		while ((temp != null) && (i < index - 1)) {
-  			temp = temp.next;
+  			temp = temp._tail;
   			i++;
   		}
 
       //temp with index-1
   		var l = new LinkedList();
   		l.data = data;
-  		l.next = temp.next;
-      l.prev = temp;
-      temp.next.prev = l;
-  		temp.next = l;
+  		l._tail = temp._tail;
+      l._head = temp;
+      temp._tail._head = l;
+  		temp._tail = l;
 
       return this;
     }
@@ -112,24 +112,24 @@ class LinkedList {
     }
 
     clear() {//+
-      this.prev = null;
+      this._head = null;
       this.data = null;
-      this.next = null;
+      this._tail = null;
       return this;
     }
 
     deleteAt(index) {//+
       var temp = this;
       var i = 0;
-      while ((temp.next != null) && (i < index - 1)) {
-  			temp=temp.next;
+      while ((temp._tail != null) && (i < index - 1)) {
+  			temp=temp._tail;
   			i++;
   		}
       //edit before
-      if (temp.next != null) {
-        temp.next = temp.next.next;
+      if (temp._tail != null) {
+        temp._tail = temp._tail._tail;
         //edit after
-        if (temp.next.next != null) temp.next.next.prev = temp;
+        if (temp._tail._tail != null) temp._tail._tail._head = temp;
       }
       return this;
     }
@@ -147,7 +147,7 @@ class LinkedList {
       var temp = this;
       var index = 0;
       while ((temp != null) && (temp.data != data)) {
-        temp = temp.next;
+        temp = temp._tail;
         index++;
       }
       return (temp == null) ? -1 : index;
