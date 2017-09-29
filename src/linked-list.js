@@ -1,27 +1,131 @@
 const Node = require('./node');
 
 class LinkedList {
-    constructor() {}
+    constructor() {
+      this.prev = null;
+      this.data = null;
+      this.next = null;
+    }
 
-    append(data) {}
+    // геттер
+    get length() {
+      var temp = this;
+      var index = 0;
+      while (temp != null) {
+        temp = temp.next;
+        index++;
+      }
+      return index;
+    }
 
-    head() {}
+    append(data) {
+      if (this.data == null) {
+        this.data = data;
+      } else {
+        var temp = this;
+        while (temp.next != null) {
+          temp=temp.next;
+        }
+			temp.next=new LinkedList();
+			temp.next.data=element;
+      }
+      return this;
+    }
 
-    tail() {}
+    addFirst(data) {
+  		if (this.data == null) {
+  			this.data = data;	//пустой
+  		} else {
+  			var temp = new List();
+        //between head and next
+  			temp.next = this.next;
+        temp.data = this.data;
+        temp.prev = this;
+        this.next.prev = temp;
 
-    at(index) {}
+        //edit head
+        this.next = temp;
+        this.data = data;
+  		}
+  		return this;
+  	}
 
-    insertAt(index, data) {}
+    head() {
+      return this.data;
+    }
 
-    isEmpty() {}
+    tail() {
+      var temp = this;
+      while (temp.next != null) {
+        temp=temp.next;
+      }
+      return temp.data;
+    }
 
-    clear() {}
+    at(index) {
+      var temp = this;
+      for (var i = 0; ((i < index) && (temp != null)); i++) {
+        temp = temp.next;
+      }
+      return temp.data;
+    }
 
-    deleteAt(index) {}
+    insertAt(index, data) {
+      var i = 0;
+  		var temp = this;
+  		while ((temp != null) && (i < index - 1)) {
+  			temp = temp.next;
+  			i++;
+  		}
+  		var l = new LinkedList();
+  		l.data = data;
+  		l.next = temp.next;
+      l.prev = temp;
+      temp.next.prev = l;
+  		temp.next = l;
+  		return this;
+    }
 
-    reverse() {}
+    isEmpty() {
+      return this.data == null;
+    }
 
-    indexOf(data) {}
+    clear() {
+      this.prev = null;
+      this.data = null;
+      this.next = null;
+      return this;
+    }
+
+    deleteAt(index) {
+      var temp = this;
+      while (i < index - 1) {
+  			temp=temp.next;
+  			i++;
+  		}
+      temp.next = temp.next.next;
+      temp.next.next.prev = temp;
+      return this;
+    }
+
+    reverse() {
+      var temp = this;
+      //-------------------------------------------------
+      //-------------------------------------------------
+      //-------------------------------------------------
+      //-------------------------------------------------
+      return this;
+    }
+
+    indexOf(data) {
+      var temp = this;
+      var index = 0;
+      while ((temp != null) && (temp.data != data)) {
+        temp = temp.next;
+        i++;
+      }
+      return (!!temp) ? -1 : i;
+    }
 }
 
 module.exports = LinkedList;
