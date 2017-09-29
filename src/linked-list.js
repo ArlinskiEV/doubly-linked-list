@@ -74,6 +74,8 @@ class LinkedList {
 
     clear() {//+
       this.node = new Node();
+      this._head = this.node;
+      this._tail = this.node;
       return this;
     }
 
@@ -102,11 +104,11 @@ class LinkedList {
     indexOf(data) {//+
       var temp = this.node;
       var index = 0;
-      while ((temp.data != null) && (temp.data != data)) {
+      while ((temp != null) && (temp.data != data)) {
         temp = temp.next;
         index++;
       }
-      return (temp.data == null) ? -1 : index;
+      return (temp == null) ? -1 : index;
     }
 }
 
