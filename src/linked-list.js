@@ -11,13 +11,13 @@ class LinkedList {
     get length() {//+
       var temp = this;
       var index = 0;
-      while (temp != null) {  //to tail
+      while ((temp!= null) && (temp.data != null)) {  //to tail
         temp = temp.next;
         index++;
       }
 
       if (temp != null) temp = this.prev;
-      while (temp != null) {  //to head
+      while ((temp!= null) && (temp != null)) {  //to head
         temp = temp.prev;
         index++;
       }
@@ -26,7 +26,9 @@ class LinkedList {
 
     append(data) { //to tail+
       if (this.data == null) {
+        this.prev = null;
         this.data = data;
+        this.next = null;
       } else {
         var temp = this;
         while (temp.next != null) {
@@ -35,16 +37,20 @@ class LinkedList {
 			temp.next = new LinkedList();
 			temp.next.data = data;
       temp.next.prev = temp;
+      temp.next.next = null;
       }
+
       return this;
     }
 
     addFirst(data) {//+
   		if (this.data == null) {
+        this.next = null;
   			this.data = data;	//пустой
+        this.prev = null;
   		} else {
   			var temp = new List();
-        //between head and next
+        //between head and next, this=head
   			temp.next = this.next;
         temp.data = this.data;
         temp.prev = this;
@@ -114,14 +120,17 @@ class LinkedList {
 
     deleteAt(index) {//+
       var temp = this;
+      var i = 0;
       while ((temp.next != null) && (i < index - 1)) {
   			temp=temp.next;
   			i++;
   		}
       //edit before
-      temp.next = temp.next.next;
-      //edit after
-      if (temp.next.next != null) temp.next.next.prev = temp;
+      if (temp.next != null) {
+        temp.next = temp.next.next;
+        //edit after
+        if (temp.next.next != null) temp.next.next.prev = temp;
+      }
       return this;
     }
 
@@ -139,9 +148,9 @@ class LinkedList {
       var index = 0;
       while ((temp != null) && (temp.data != data)) {
         temp = temp.next;
-        i++;
+        index++;
       }
-      return (!!temp) ? -1 : i;
+      return (temp == null) ? -1 : index;
     }
 }
 
