@@ -11,8 +11,9 @@ class LinkedList {
     get length() {//+
       var temp = this._head;
       var index = 0;
-      while (temp != this._tail) {
+      while ((temp != null ) && (temp.data != null)) {
         temp=temp.next;
+        index++;
       }
       return index;
     }
@@ -49,7 +50,7 @@ class LinkedList {
       var i = 0;
   		var temp = this.node;
 
-      if (index == 0) return this.addFirst(data);
+      if (index == 0) return this.append(data);
 
   		while ((temp.data != null) && (i < index)) {
   			temp = temp.next;
@@ -80,24 +81,34 @@ class LinkedList {
     }
 
     deleteAt(index) {//+
-      var temp = this.node;
+      var temp = this._head;
       var i = 0;
       while ((temp.next != null) && (i < index)) {
   			temp=temp.next;
   			i++;
   		}
       //edit before
-      temp.prev.next = temp.next;
-      temp.next.prev = temp.prev;
+      if (temp.prev != null) temp.prev.next  = temp.next;
+      if (temp.next != null) temp.next.prev = temp.prev;
       return this;
     }
 
     reverse() {
-      var temp = this.node;
-      //-------------------------------------------------
-      //-------------------------------------------------
-      //-------------------------------------------------
-      //-------------------------------------------------
+      var tempFromHead = this._head;
+      var tempFromTail = this._tail;
+      var i = 0;
+      var j = this.length - 1;
+
+      while (i < j){
+        var temp = tempFromHead.data;
+        tempFromHead.data = tempFromTail.data;
+        tempFromTail.data = temp;
+        tempFromTail = tempFromTail.prev;
+        tempFromHead = tempFromHead.next;
+        i++;
+        j--;
+      }
+
       return this;
     }
 
